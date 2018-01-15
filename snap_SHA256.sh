@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 tmpdir=""
+machine=$(uname -m)
 wherein="snapshots"
 if [ z"$1" == z ]; then
 	echo 'no first-arg bypass...'
@@ -23,8 +24,8 @@ elif [ z"$1" == "z-r62" ]; then
 elif [ z"$1" == "z-r63" ]; then
 	wherein="6.3"
 else
-	#tmpdir=/tmp/tmp.Q7s73OF7OI
 	tmpdir=/home/hfeltonadmin/snaps/s20171009
+	#tmpdir=/tmp/tmp.Q7s73OF7OI
 	tmpfns=/tmp/tmp.c7ibPuZy1s
 	echo 'using "$tmpdir" and "$tmpfns" ...'
 fi
@@ -55,7 +56,7 @@ else
 	echo '...hashes bad, so ignoring "$tmpfns" ...'
 	tmpfns=""
 fi
-ftpstart="$mirror"/"$wherein"/$(uname -m)
+ftpstart="$mirror"/"$wherein"/"$machine"
 #
 # -f means file is regular (and exists)
 # -n, -z apply to STRINGs
@@ -113,16 +114,20 @@ for fn in $fnlist; do
 #
 	$($cmdsigBeg $key2 $cmdsigEnd $fn 2>/dev/null)     
 	if [[ $? -ne 0  &&  $retstr != "" ]]; then
-		retstr="Bad check2 on $fn"
+		retstr="\nBad check2 on $fn"
 		echo $retstr
 		# FULL Failure...
 		retfull="1"
+	else
+		# kluge for debugging...
+		retstr="$fn is ok"
+		echo -n $retstr,
 	fi
 done
 #
 # these are as-good-as-can-be...
 #
 if [ X"$retfull" == X ]; then
-	echo
+	echo "\n"
 	echo "finished $0 w/files in $tmpdir..."
 fi
