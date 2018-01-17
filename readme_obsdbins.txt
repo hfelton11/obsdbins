@@ -1,3 +1,14 @@
+02:55 2018-01-15
+
+git: for LINUX, i like git-kraken...  for WIN, it is ok-ish...
+for bsd, im still just using cmd-line (and that is fallback for all)...
+
+the two-important files in this directory are snap_SHA256.sh which
+auto-downloads -current for -machine into /tmp...
+alongside cvsup.sh, they should be sym-linked (ln -s git-dir/file ~/bin/.)
+so that they will become updated upon every git-pull update...
+
+
 02:10 2017-12-05
 
 even tho this directory/repository/readme are
