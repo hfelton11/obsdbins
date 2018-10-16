@@ -1,0 +1,5 @@
+/etc/letsencrypt/accounts/acme-v01.api.letsencrypt.org/directory/9ab9c8a8b8e037df59d7ac768acefce9
+total 16
+-rw-r--r--  1 root  wheel    85 Oct  3 13:34 meta.json
+-r--------  1 root  wheel  3169 Oct  3 13:34 private_key.json
+-rw-r--r--  1 root  wheel  1114 Oct  3 13:34 regr.json

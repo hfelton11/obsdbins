@@ -1,0 +1,11 @@
+# hfeltonadmin crontab
+#   check with http://cronsandbox.com
+#
+#m h d M w cmd
+#minute-of-day (0-59)
+#  hour-of-day (0-23)
+#    day-of-month (1-31)
+#      month-of-year (1-12) 
+#        weekday-of-week (0-7) 0,7=sunday
+#0 0 * * * "/home/hfeltonadmin/.acme.sh"/acme.sh --cron --home "/home/hfeltonadmin/.acme.sh" > /dev/null 
+#

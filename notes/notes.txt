@@ -1,0 +1,43 @@
+2018-09-21 @ 0444
+
+i really should sort out a better way to take notes...
+
+yesterday was all about trying to get logged into this vm...
+1) i think it auto-rebooted, or mischa DID notice the email
+  i sent thru local-mail here (or was it server3 ?)...  i
+  had managed to login the first time, but was having a hard
+  time sorting out the font-issue with '1' and 'ell' on the
+  root-passwd...  i spun around thinking that maybe i needed
+  a local-pwd on my incoming-key to get it to work...  lol...
+  eventually, using hexdump (with format a, i think) i was
+  able to sort out why the third-char was not matching up...
+2) finally i was able to login and su -root, but what is odd
+  is that i got confused (again) about the diff btwn su and doas
+  (or old-style sudo)...  so when i changed my hfeltonadmin
+  pwd to something less-ambiguous - i had NOT changed it for
+  root...  lol...  apparently hfeltonadmin and root were both
+  set to the same pwd, initially - so it is fine that theyre
+  now different, i guess...  whatev...
+3) the rest of the romanz-deploy-guide came along just fine...
+  see orig at: https://www.romanzolotarev.com/openbsd.amsterdam.html
+
+subtleties for today include...
+1) ping hfelton.openbsd.amsterdam goes to spam-bad via dns
+  at 198.105.254.130 - which i guess is ok, but should prolly
+  sort out more of the details as i start to develop my real
+  webserver for the hfelton.co.il domain that is waiting...
+2) otoh, ive started to get the git-clones going and now i
+  need to sort out cron (for syspatch) and/or following the
+  -current again...  hopefully, i can keep documentation
+  going as well...  altho atm i cannot remember where i had
+  kept all my notes about the vm from yesterday...  oh yeah,
+  they are prolly on server3 since that was where i was trying
+  to figure out how to reboot (if needed) my vm...  whatev...
+3) subjects of interest include: ipv6 details and the very
+  real question of how to make the full-yiddish site work...
+  for the moment, i cannot get my domain during priority
+  because registrar dyn.com cannot handle it...  presumably
+  there will be no-big-deal to pick it up in november after
+  the landrush period - but that is why i picked up the .co.il...
+4) i should REALLY remove the junky pwd### files but they
+  make me chuckle, for the moment...  LOL...

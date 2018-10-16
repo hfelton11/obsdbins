@@ -1,0 +1,12 @@
+#!/bin.sh  
+# acme-sh.txt
+.acme.sh --install \
+--home ~/acme-sh \
+--config-home ~/acme-sh/data \
+--certhome ~/acme-sh/certs \
+--accountemail "hfeltonadmin@hfelton.com" \
+--accountkey ~/acme-sh/account.key \
+--accountconf ~/acme-sh/account.conf 
+
+# --accountconf ~/acme-sh/account.conf \
+# --useragent "this is my client."  
