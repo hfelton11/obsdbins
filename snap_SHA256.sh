@@ -16,6 +16,7 @@ elif [ z"$1" == "z-h" ]; then
 	echo "-r62 is MAGIC and grabs the release-dir for 6.2"
 	echo "-r63 is MAGIC and grabs the release-dir for 6.3"
 	echo "-r64 is MAGIC and grabs the release-dir for 6.4"
+	echo "-r65 is MAGIC and grabs the release-dir for 6.5"
 	echo
 	exit 0
 elif [ z"$1" == "z-r61" ]; then
@@ -26,6 +27,8 @@ elif [ z"$1" == "z-r63" ]; then
 	wherein="6.3"
 elif [ z"$1" == "z-r64" ]; then
 	wherein="6.4"
+elif [ z"$1" == "z-r65" ]; then
+	wherein="6.5"
 else
 	tmpdir=/home/hfeltonadmin/snaps/s20171009
 	#tmpdir=/tmp/tmp.Q7s73OF7OI
@@ -102,6 +105,9 @@ if [ $wherein == "-r63" ]; then
 fi
 if [ $wherein == "-r64" ]; then
 	key2="/etc/signify/openbsd-64-base.pub"
+fi
+if [ $wherein == "-r65" ]; then
+	key2="/etc/signify/openbsd-65-base.pub"
 fi
 cmdsigBeg="signify -C -q -p "
 cmdsigEnd=" -x ${hash}.sig "
