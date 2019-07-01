@@ -3,6 +3,7 @@
 tmpdir=""
 machine=$(uname -m)
 wherein="snapshots"
+pkeys="latest"
 if [ z"$1" == z ]; then
 	echo 'no first-arg bypass...'
 elif [ z"$1" == "z-h" ]; then
@@ -21,14 +22,19 @@ elif [ z"$1" == "z-h" ]; then
 	exit 0
 elif [ z"$1" == "z-r61" ]; then
 	wherein="6.1"
+	pkeys="61"
 elif [ z"$1" == "z-r62" ]; then
 	wherein="6.2"
+	pkeys="62"
 elif [ z"$1" == "z-r63" ]; then
 	wherein="6.3"
+	pkeys="63"
 elif [ z"$1" == "z-r64" ]; then
 	wherein="6.4"
+	pkeys="64"
 elif [ z"$1" == "z-r65" ]; then
 	wherein="6.5"
+	pkeys="65"
 else
 	tmpdir=/home/hfeltonadmin/snaps/s20171009
 	#tmpdir=/tmp/tmp.Q7s73OF7OI
@@ -94,20 +100,12 @@ key2=$(ls /etc/signify/openbsd-??-base.pub | tail -2 | tail -1)
 #echo "key1=$key1"
 #echo "key2=$key2"
 # hack for -r61, while snaps are -62 and -63 (now during rc-time)
-if [ $wherein == "-r61" ]; then
-	key2="/etc/signify/openbsd-61-base.pub"
-fi
-if [ $wherein == "-r62" ]; then
-	key2="/etc/signify/openbsd-62-base.pub"
-fi
-if [ $wherein == "-r63" ]; then
-	key2="/etc/signify/openbsd-63-base.pub"
-fi
-if [ $wherein == "-r64" ]; then
-	key2="/etc/signify/openbsd-64-base.pub"
-fi
-if [ $wherein == "-r65" ]; then
-	key2="/etc/signify/openbsd-65-base.pub"
+# however, if we want an OLD release, we need this hack also...
+#if [ $wherein == "-r61" ]; then
+#	key2="/etc/signify/openbsd-61-base.pub"
+#fi
+if [ $pkeys != "latest" ]; then
+	key2="/etc/signify/openbsd-$pkeys-base.pub"
 fi
 cmdsigBeg="signify -C -q -p "
 cmdsigEnd=" -x ${hash}.sig "
