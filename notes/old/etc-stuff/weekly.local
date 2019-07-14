@@ -1,6 +1,10 @@
-next_part "We are running weekly.local now..."
-	echo "Hello from /etc/weekly.local..."
-	echo " ... mini-check of ONE acme-client:"
-	/usr/sbin/acme-client -v hfelton.com
+# /etc/weekly.local
+LOGINACCOUNTING=1
 
-next_part "End of weekly.local."
+next_part "weekly.local start..."
+	echo "...checking weekly-sys-variable-scripts..."
+	if [ "X$LOGINACCOUNTING" = X1 ] ; then echo "LOGINACCOUNTING..." ;
+	fi
+
+next_part "... ending weekly.local."
+	echo 

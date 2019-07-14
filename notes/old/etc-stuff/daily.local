@@ -1,10 +1,28 @@
-next_part "We are running daily.local now..."
-	echo "Hello from /etc/daily.local..."
+# /etc/daily.local
+ROOTBACKUP=1
+CHECKFILESYSTEMS=1
+
+next_part "daily.local start..."
+	echo "...syspatch check..."
 	ANS=`syspatch -c`
-#	echo $($ANS)
-	echo "syspatch-list=>>>$ANS<<<"
-	if [ -n "$ANS" ] ; then echo " ==== DO A SYSPATCH === " ; 
+#	echo "syspatch-list=>>>$ANS<<<"
+	if [ -n "$ANS" ] ; then 
+		echo "syspatch-list=>>>$ANS<<<"
+		echo " ==== DO A SYSPATCH === " ; 
 	fi
 
-next_part "End of daily.local."
-	echo
+next_part "...checking daily-sys-variable-scripts..."
+	echo ;
+#	ROOTBACKUP=1
+	if [ "X$ROOTBACKUP" = X1 ] ; then echo "ROOTBACKUP..." ;
+	fi
+#	CHECKFILESYSTEMS=1
+	if [ "X$CHECKFILESYSTEMS" = X1 ] ; then echo "CHECKFILESYSTEMS..." ;
+	fi
+	if [ "X$CALENDAR" != X0 ] ; then echo "CALENDAR..." ;
+	fi
+	if [ "X$VERBOSESTATUS" != X0 ] ; then echo "VERBOSESTATUS..." ;
+	fi
+
+next_part "... ending daily.local."
+	echo 
