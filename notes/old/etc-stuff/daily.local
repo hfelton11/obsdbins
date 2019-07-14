@@ -1,0 +1,10 @@
+next_part "We are running daily.local now..."
+	echo "Hello from /etc/daily.local..."
+	ANS=`syspatch -c`
+#	echo $($ANS)
+	echo "syspatch-list=>>>$ANS<<<"
+	if [ -n "$ANS" ] ; then echo " ==== DO A SYSPATCH === " ; 
+	fi
+
+next_part "End of daily.local."
+	echo

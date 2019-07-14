@@ -1,0 +1,7 @@
+next_part "We are running monthly.local now..."
+	echo "Hello from /etc/monthly.local..."
+	echo "... checking acme-client values:"
+	/usr/sbin/acme-client -vv hfelton.com
+	/usr/sbin/acme-client -vv hfelton.org
+
+next_part "End of monthly.local."

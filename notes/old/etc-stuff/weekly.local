@@ -1,0 +1,6 @@
+next_part "We are running weekly.local now..."
+	echo "Hello from /etc/weekly.local..."
+	echo " ... mini-check of ONE acme-client:"
+	/usr/sbin/acme-client -v hfelton.com
+
+next_part "End of weekly.local."
