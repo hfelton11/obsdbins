@@ -1,3 +1,22 @@
-httpd_flags=
-ntpd_flags=-s
-sndiod_flags=NO
+# /etc/rc.conf.local
+
+ntpd_flags="-s"		# Synch time to an ntp server then exit
+
+# main hfelton.com/hfelton.org or local websites...
+httpd_flags=	
+
+# remote vm-items...
+sndiod_flags=NO		# DISABLE sound for virtual-machines...
+
+# local bare-metal-machine items...
+#apmd_flags="-A"		# Start Auto power management
+#library_aslr=NO		# Stop randomizing libraries after each boot
+#dhcpd_flags=re0
+#multicast=YES		# DO NOT reject IPV4 multicast packets by default
+
+# workstation-type items...
+##xenodm_flags=		# Start Xenodm for graphical login
+## If you are using wiconn.sh to connect to a wireless network
+## The next line starts daemons that were installed over and above the
+## base install.  This includes dbus for session management,
+#pkg_scripts="messagebus"
