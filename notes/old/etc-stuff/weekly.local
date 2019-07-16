@@ -1,10 +1,23 @@
 # /etc/weekly.local
-LOGINACCOUNTING=1
+#LOGINACCOUNTING=1
+CHKWWWSITE=hfelton.com
 
 next_part "weekly.local start..."
-	echo "...checking weekly-sys-variable-scripts..."
+	if [ "X$CHKWWWSITE" != X -a -x /usr/sbin/acme-client ] ; then 
+		echo "... mini-check of $CHKWWWSITE acme-client:" ;
+		ANS=`/usr/sbin/acme-client -v $CHKWWWSITE` ;
+		if [ $? ] ; then
+			### because of -v, always non-empty string... ###
+			echo $ANS ;
+		else echo "--- acme-client check FAILED ---" ;
+		fi	
+	else echo ;
+	fi
+
+next_part "...checking weekly-sys-variable-scripts..."
+	echo ;
 	if [ "X$LOGINACCOUNTING" = X1 ] ; then echo "LOGINACCOUNTING..." ;
 	fi
 
 next_part "... ending weekly.local."
-	echo 
+	echo ;

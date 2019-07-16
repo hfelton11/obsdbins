@@ -1,7 +1,14 @@
 # /etc/monthly.local
+CMD1="/usr/sbin/acme-client -vv hfelton.com" 
+CMD2="/usr/sbin/acme-client -vv hfelton.org" 
+CMD3="/usr/sbin/acme-client -vv hfelton.co.il" 
 
 next_part "monthly.local start..."
-	echo "...NO monthly-sys-variables to check..."
+	echo "...NO monthly-sys-variables to check..." ;
+	### hacky solution... ###
+	`$CMD1` ;
+	`$CMD2` ;
+#	#`$CMD3` ;
 
 next_part "... ending monthly.local."
-	echo 
+	echo ;
