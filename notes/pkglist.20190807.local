@@ -1,0 +1,42 @@
+ImageMagick-6.9.10.36 image processing tools
+colortree-1.8.0     print a tree of the directory structure
+consolekit2-1.2.1p6 framework for defining and tracking users, sessions & seats
+cowsay-3.04         speaking ascii cow
+cvsync-0.25.0pre0p4 CVS repository synchronization utility
+feh-2.27            lightweight image viewer
+firefox-esr-60.6.1  Firefox web browser, Extended Support Release
+geeqie-1.4p1v0      lightweight Gtk+3 based image viewer
+gimmix-0.5.7.2p7    small and easy to use graphical MPD client
+gimp-2.8.22p3       GNU Image Manipulation Program
+git-2.21.0          GIT - Tree History Storage Tool
+gnome-icon-theme-3.12.0p5 base icon theme for GNOME
+gnome-icon-theme-symbolic-3.12.0p3 base icon theme extension for special UI contexts
+gnome-menus-3.10.1p3 implementation of the FreeDesktop Desktop Menu Spec
+gnome-mplayer-1.0.9p6v0 GTK+/GNOME frontend for MPlayer
+gnome-themes-extra-3.28p2 extra themes for GNOME applications
+gtkam-1.0p2         digital camera frontend
+inkscape-0.92.4     SVG vector drawing application
+jgmenu-2.1          freedesktop-compliant menu for openbox and tint2
+leafpad-0.8.18.1p7  simple GTK+ text editor
+liberation-fonts-2.00.1p1 substitute for MS TTF core fonts
+libreoffice-6.2.2.2p0v0 multi-platform productivity suite
+lxappearance-0.6.3p0 GTK 2 and 3 Theme Switcher from LXDE
+lynx-2.8.9rel1      text web browser
+mc-4.8.22p0         free Norton Commander clone with many useful features
+menu-cache-1.1.0p0  caching mechanism for freedesktop.org compliant menus
+mpd-0.20.23         Music Player Daemon
+openbox-3.6.1p4     small, fast & usable window manager
+pcmanfm-1.3.1       fast and lightweight file manager
+pysol-2.4.0         solitaire card games collection
+quirks-3.124        exceptions to pkg_add rules
+rdiff-backup-1.2.8p8 incremental backup
+rsync-3.1.3         mirroring/synchronization over low bandwidth links
+screen-4.0.3p6      multi-screen window manager
+stow-2.2.2p0        manages software package installations with symlinks
+sylpheed-3.7.0p2    lightweight and user-friendly e-mail client
+tint2-16.6.1        freedesktop-compliant panel
+tray-app-0.3.1p0    small utilities for X11 system tray: eject, battery, mixer
+tree-0.62           print ascii formatted tree of a directory structure
+unzip-6.0p11        extract, list & test files in a ZIP archive
+wget-1.20.3         retrieve files from the web via HTTP, HTTPS and FTP
+yad-0.40.0p0        display graphical dialogs from shell scripts or command line
