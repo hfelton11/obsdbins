@@ -1,0 +1,16 @@
+cowsay-3.04         speaking ascii cow
+entr-4.1            run arbitrary commands when files change
+figlet-2.2.5        generates ASCII banner art
+git-2.21.0          GIT - Tree History Storage Tool
+lynx-2.8.9rel1      text web browser
+mc-4.8.22p0         free Norton Commander clone with many useful features
+p5-Authen-SASL-2.16 perl interface to the SASL auth framework
+p5-Net-SMTP-SSL-1.04 SSL support for Net::SMTP
+pkglocatedb-1.5     database of packages for use with locate(1)
+quirks-3.124        exceptions to pkg_add rules
+rdiff-backup-1.2.8p8 incremental backup
+rxvt-unicode-9.22p7 clone of rxvt with Unicode and Xft support
+socat-1.7.3.1p0     relay for bidirectional data transfer
+stow-2.2.2p0        manages software package installations with symlinks
+tree-0.62           print ascii formatted tree of a directory structure
+vim-8.1.1048-no_x11 vi clone, many additional features
