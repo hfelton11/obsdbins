@@ -1,21 +1,30 @@
 #!/bin/ksh
 #
-# hjf latest mod: 2019-08-05 @ 10:00
+# hjf latest mod: 2019-08-10 @ 12:00 PDT
 #
 ## vidoas.sh
 #
 ## this is a basic copy/update from eradman at
-## http://eradman.com/postst/ut-shell-scripts.html
+## http://eradman.com/posts/ut-shell-scripts.html
+## PATTERN singleton try/assert()
 ## 
 ## GOAL try to create a vidoas pgm like visudo...
+## ASSUMPTIONS interactive edits, allow re-edits post-run...
 
 export LAUNCH_CMDS=`mktemp`
 export VI_FILE=`mktemp`
 export USR=`whoami`
 export TTY=`tty`
 export DOASFILE="/etc/doas.conf"
+export TESTING_STRING="Currently 4 possible tests: \n \
+1. incorrect doas-pw for initial copy... \n \
+2. incorrect edit of doas-file... \n \
+3. incorrect permissions of valid doas-file... \n \
+4. incorrect doas-pw for final replacement... \n"
+export DODEBUG=
 
 
+# SINGLETON-setup
 typeset -i test_runs=0
 function try { this="$1"; }
 trap 'printf "$0: exit code $? on line $LINENO\nFAIL: $this\n"; exit 1' ERR
@@ -25,13 +34,17 @@ function assert {
 	printf "\nFAIL: $this\n'$1' != '$2'\n"; exit 1
 }
 
+try "0. TESTING..."
+[ "$DODEBUG" ] && { echo $TESTING_STRING; }
+assert "`echo 't'`" "t"
+
 try "1. create an edit-able copy..."
 cat > $LAUNCH_CMDS <<-'LAUNCHER'
 	doas -L
 	doas cp $DOASFILE $VI_FILE
 	doas -L
 LAUNCHER
-# syserr catches bad passwords here...
+# fd/syserr catches bad passwords here...
 assert "`. $LAUNCH_CMDS 2>&1`" ""
 
 try "2. go ahead and vi-edit ..."
@@ -41,7 +54,7 @@ cat > $LAUNCH_CMDS <<-'LAUNCHER'
 	( ksh -i -c "vi $VI_FILE <$TTY >$TTY" )
 	doas -C $VI_FILE 
 LAUNCHER
-# check blatant errors in editting...
+# check for syntax errors from editting...
 assert "`. $LAUNCH_CMDS 2>&1`" ""
 
 try "3. post-edit-check for replacement permissions..."
