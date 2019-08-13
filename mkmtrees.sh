@@ -1,6 +1,6 @@
 #!/bin/ksh
 #
-# hjf last mod: 2019-08-13 13:30 PDT
+# hjf last mod: 2019-08-13 14:00 PDT
 #
 # mkmtrees.sh
 #
@@ -11,8 +11,9 @@ export FNDIR="/etc/mtree"
 export FNTYP="secure"
 export FNOWN="root:wheel"
 export FNMOD="600"
-# final cksum cmd --AND-- intermediate digests
+# intermediate digests --AND-- final cksum cmd 
 export SHA256="sha256"
+#export CMD="mtree -cix -p $ITEM -K ${SHA256}digest,type "
 # seconds since epoch-UTC
 export TODAY=`date +"%s"`
 export TMPLOC=`mktemp`
@@ -27,15 +28,22 @@ for ITEM in $MKMTREEPATHS; do
 	echo "making mtree for $ITEM --> $FNFULL (epoch: $TODAY)"
 	CMD="mtree -cix -p $ITEM -K ${SHA256}digest,type "
 	doas $CMD > $TMPLOC 
+	# really need/want persist-doas...
 	doas cp -fp $TMPLOC $FNFULL
 	doas chown $FNOWN $FNFULL
 	doas chmod $FNMOD $FNFULL
 done
+
 FNLIST=`cat $TMPNAMS`
 doas $SHA256 $FNLIST > $TMPCKSUM
-FINALCKSUM="$FNDIR/$SHA256_$TODAY.fullcksum"
+FINALCKSUM="$FNDIR/${SHA256}_$TODAY.fullcksum"
 doas cp -fp $TMPCKSUM $FINALCKSUM
 doas chown $FNOWN $FINALCKSUM
 doas chmod 444 $FINALCKSUM
+
+rm -f $TMPLOC
+rm -f $TMPNAMS
+rm -f $TMPCKSUM
+
 #echo "$0 complete: master cksums stored at $FINALCKSUM"
 echo "mkmtrees.sh done... : master cksums stored at $FINALCKSUM"
