@@ -7,19 +7,23 @@
 # create default mtrees for trojan-catching...
 
 export MKMTREEPATHS="/bin /sbin /usr/bin /usr/sbin"
-export MATCHNAMES="bin sbin usr_bin usr_sbin"
+#export MATCHNAMES="bin sbin usr_bin usr_sbin"
 export FNDIR="/etc/mtree"
 export FNTYP="secure"
 export FNOWN="root:wheel"
 export FNMOD="600"
+export TODAY=`date "%+"`
 export TMPLOC=`mktemp`
+export FINALCKSUM=`mktemp`
 
 for ITEM in $MKMTREEPATHS; do
 	# remove / for filename
 	FN=`echo "$ITEM"|sed -e s:/:: -e s:/:_:g`
 	FNFULL="$FNDIR/$FN.$FNTYP"
-	echo "$ITEM --> $FNFULL"
-	doas mtree -cix -p $ITEM -K sha256digest,type > $TMPLOC
+	echo "making mtree for $ITEM --> $FNFULL (seed: $TODAY)"
+	CMD="mtree -cix -p $ITEM -K sha256digest,type -s $TODAY"
+	doas $CMD > $TMPLOC 2> $FINALCKSUM
+	doas cp -fp $FINALCKSUM $FNDIR/seed_$TODAY.fullcksum
 	doas cp -fp $TMPLOC $FNFULL
 	doas chown $FNOWN $FNFULL
 	doas chmod $FNMOD $FNFULL
