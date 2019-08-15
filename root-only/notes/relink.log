@@ -1,0 +1,6 @@
+(SHA256) /bsd: FAILED
+
+Failed to verify /bsd's checksum, therefore a randomly linked kernel (KARL)
+is not being built. KARL can be re-enabled for next boot by issuing as root:
+
+sha256 -h /var/db/kernel.SHA256 /bsd
