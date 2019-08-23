@@ -13,6 +13,7 @@ elif [ z"$1" == "z-h" ]; then
 	echo "     directory and filelist-file in this program..."
 	echo "otherwise, all files are stored in 'mktemp' areas which"
 	echo "     will NOT survive a reboot unless copied elsewhere..."
+	echo "-fw is MAGIC and grabs the snapshot-firmware files"
 	echo "-r61 is MAGIC and grabs the release-dir for 6.1"
 	echo "-r62 is MAGIC and grabs the release-dir for 6.2"
 	echo "-r63 is MAGIC and grabs the release-dir for 6.3"
@@ -21,6 +22,9 @@ elif [ z"$1" == "z-h" ]; then
 	echo "-r66 is MAGIC and grabs the release-dir for 6.6"
 	echo
 	exit 0
+elif [ z"$1" == "z-fw" ]; then
+	do_FW="1"
+	pkeys="66"
 elif [ z"$1" == "z-r61" ]; then
 	wherein="6.1"
 	pkeys="61"
@@ -72,7 +76,11 @@ else
 	echo '...hashes bad, so ignoring "$tmpfns" ...'
 	tmpfns=""
 fi
-ftpstart="$mirror"/"$wherein"/"$machine"
+if [ -n "$do_FW" ]; then
+	ftpstart="http://firmware.openbsd.org/firmware"/"$wherein"
+else
+	ftpstart="$mirror"/"$wherein"/"$machine"
+fi
 #
 # -f means file is regular (and exists)
 # -n, -z apply to STRINGs
@@ -83,8 +91,11 @@ if [ -f "$tmpfns" ]; then
 else
 	ftp 	"$ftpstart"/"$hash"{.sig,}
 	fnames=$(mktemp)
-	cat "$hash" | cut -d ' ' -f 2 -s SHA256 | \
-sed s/\(// | sed s/\)// | grep -v -e '.fs' -e '.iso' > "$fnames"
+	##if [ "X$do_FW" = X  ]; then
+		cat "$hash" | cut -d ' ' -f 2 -s SHA256 | \
+		sed s/\(// | sed s/\)// |  \
+		grep -v -e '.fs' -e '.iso' > "$fnames"
+	##fi
 fi
 #
 # strip out iso/fs duplicates
@@ -109,7 +120,12 @@ key2=$(ls /etc/signify/openbsd-??-base.pub | tail -2 | tail -1)
 #	key2="/etc/signify/openbsd-61-base.pub"
 #fi
 if [ $pkeys != "latest" ]; then
-	key2="/etc/signify/openbsd-$pkeys-base.pub"
+	##key2="/etc/signify/openbsd-$pkeys-base.pub"
+	if [ -n "$do_FW" ]; then
+		key2="/etc/signify/openbsd-$pkeys-fw.pub"
+	else
+		key2="/etc/signify/openbsd-$pkeys-base.pub"
+	fi
 fi
 cmdsigBeg="signify -C -q -p "
 cmdsigEnd=" -x ${hash}.sig "
