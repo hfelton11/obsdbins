@@ -91,20 +91,21 @@ if [ -f "$tmpfns" ]; then
 else
 	ftp 	"$ftpstart"/"$hash"{.sig,}
 	fnames=$(mktemp)
-	##if [ "X$do_FW" = X  ]; then
-		cat "$hash" | cut -d ' ' -f 2 -s SHA256 | \
+	#
+	# strip out iso/fs duplicates/junks
+	#
+	cat "${hash}.sig" | sed '1d;2d;$d' | \
+		cut -d ' ' -f 2 -s SHA256 | \
 		sed s/\(// | sed s/\)// |  \
-		grep -v -e '.fs' -e '.iso' > "$fnames"
-	##fi
+		grep -v -e '.fs' -e '.iso' | \
+		grep -v -e 'SHA'  -e 'index.txt' > "$fnames"
 fi
-#
-# strip out iso/fs duplicates
 #
 cat "$fnames" | paste -d ',' -s -
 fnlist=$(paste -s $fnames)
 # 
 for fn in $fnlist; do
-#	echo "fn is $fn"
+	#echo "fnlist:fn is $fn"
 	if [ ! -f "$fn" ]; then
 		ftp 	"$ftpstart"/"$fn"
 	fi
@@ -120,7 +121,6 @@ key2=$(ls /etc/signify/openbsd-??-base.pub | tail -2 | tail -1)
 #	key2="/etc/signify/openbsd-61-base.pub"
 #fi
 if [ $pkeys != "latest" ]; then
-	##key2="/etc/signify/openbsd-$pkeys-base.pub"
 	if [ -n "$do_FW" ]; then
 		key2="/etc/signify/openbsd-$pkeys-fw.pub"
 	else
