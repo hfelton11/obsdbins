@@ -1,0 +1,1 @@
+doas umount /mnt/usbbkp/

@@ -1,0 +1,7 @@
+# /etc/monthly.local
+
+next_part "monthly.local start..."
+	echo ;
+
+next_part "... ending monthly.local."
+	echo ;
