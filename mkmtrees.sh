@@ -1,6 +1,6 @@
 #!/bin/ksh
 #
-# hjf last mod: 2019-08-13 14:00 PDT
+# hjf last mod: 2020-04-12 19:30 PDT
 #
 # mkmtrees.sh
 #
@@ -16,9 +16,19 @@ export SHA256="sha256"
 #export CMD="mtree -cix -p $ITEM -K ${SHA256}digest,type "
 # seconds since epoch-UTC
 export TODAY=`date +"%s"`
+# temp-files, as needed...
 export TMPLOC=`mktemp`
 export TMPNAMS=`mktemp`
 export TMPCKSUM=`mktemp`
+
+export HELPMSG="\n \
+hopefully this was called via: \
+'doas -u mkmtrees mkmtrees.sh' \
+ or similar... \n \
+because calling-user will want \
+persist or nopass doas-options... \n"
+
+echo $HELPMSG;
 
 for ITEM in $MKMTREEPATHS; do
 	# remove-or-xlate / for filename
@@ -34,6 +44,7 @@ for ITEM in $MKMTREEPATHS; do
 	doas chmod $FNMOD $FNFULL
 done
 
+echo "mtree loops complete..."
 FNLIST=`cat $TMPNAMS`
 doas $SHA256 $FNLIST > $TMPCKSUM
 FINALCKSUM="$FNDIR/${SHA256}_$TODAY.fullcksum"
