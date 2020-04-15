@@ -1,0 +1,4 @@
+dhcpd_flags=re0 re1
+portmap_flags=
+ypbind_flags=
+ypserv_flags=

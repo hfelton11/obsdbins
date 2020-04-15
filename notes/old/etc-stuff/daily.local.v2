@@ -1,0 +1,87 @@
+# /etc/daily.local
+# global vars...
+#ROOTBACKUP=1
+#CHECKFILESYSTEMS=1
+#CALENDAR=1
+#VERBOSESTATUS=1
+# local vars...
+DOSYSPATCH=
+DOMKMTREES=1 
+S_FILE=/var/log/security.out
+
+next_part "daily.local start..."
+	if [ "X$DOSYSPATCH" != X1 ] ; then 
+		echo "skipping SYSPATCH-checks..." ;
+	else
+	  if [ -x /usr/sbin/syspatch ] ; then
+		echo "...syspatch check..." ;
+		ANS=`/usr/sbin/syspatch -c` ;
+		if [ $? ] ; then
+			if [ -n "$ANS" ] ; then 
+				echo "syspatch-list=>>>$ANS<<<" ;
+				echo " ==== DO A SYSPATCH === " ; 
+			else echo "...up-to-date..." ;
+			fi
+		else echo "---syspatch check FAILED---" ;
+		fi
+	  else echo ;
+	  fi
+	fi
+
+next_part "update security via mkmtrees, if applic..."
+	if [ "X$DOMKMTREES" != X1 ] ; then 
+		echo "skipping MKMTREES-checks..." ;
+	else
+	  # THIS RUNS BEFORE TODAYS SECURITY RUN, SO...
+	  # +1=old, +2=new, +4=match
+	  # 0->2->1->0 is sequence for most-things like /etc/daily.local...
+	  # 0->2->3->(rpt-3-as-needed)->7 is sequence for MAJOR sysupgrade...
+	  # 7->(poss-3/1)->(poss-3/2/1)->(hope-1)->(hope-0) is finale...
+	  let mkmtrees_DOIT=0
+	  if [ -s "$S_FILE" ] ; then
+		echo "...security-file is not-ZERO..." ;
+		mkmtrees_DOIT=$((mkmtrees_DOIT+2))
+	  fi
+	  if [ -s "${S_FILE}.old" ] ; then
+		echo "...security-file-old is not-ZERO..." ;
+		mkmtrees_DOIT=$((mkmtrees_DOIT+1))
+	  fi
+	  if [ $mkmtrees_DOIT -eq 0 ] ; then
+		echo "both security files are ZERO - so don't worry..." ;
+	  else
+		ANS=`diff $S_FILE ${S_FILE}.old` ;
+		if [ $? ] ; then
+			if [ -z "$ANS" ] ; then 
+				echo "...security-files match ..." ;
+				mkmtrees_DOIT=$((mkmtrees_DOIT+4))
+	  		else echo "...new-vs-old security-files do not match..." ;
+			fi
+		else echo "---security-diff FAILED---" ;
+		fi
+	  fi
+	  if [ $mkmtrees_DOIT -eq 7 ] ; then
+		echo "TADAH !!!!" ;
+		#doas -u mkmtrees ~hfeltonadmin/bin/mkmtrees.sh
+		#/home/hfeltonadmin/bin/mkmtrees.sh
+		ANS=`/home/hfeltonadmin/bin/mkmtrees.sh` ;
+		echo "mkmtrees.sh output=>>>$ANS<<<" ;
+		echo " ==== DID IT WORK ??? === " ; 
+	  # all other cases (0-6) should have meanings/comments...
+	  #else echo "not-yet, maybe tomorrow...  i guess i-->$mkmtrees_DOIT" ;
+	  else echo "i-->$mkmtrees_DOIT" ;
+	  fi
+	fi	
+
+next_part "...checking daily-sys-variable-scripts..."
+	echo ;
+	if [ "X$ROOTBACKUP" = X1 ] ; then echo "ROOTBACKUP..." ;
+	fi
+	if [ "X$CHECKFILESYSTEMS" = X1 ] ; then echo "CHECKFILESYSTEMS..." ;
+	fi
+	if [ "X$CALENDAR" != X0 ] ; then echo "CALENDAR..." ;
+	fi
+	if [ "X$VERBOSESTATUS" != X0 ] ; then echo "VERBOSESTATUS..." ;
+	fi
+
+next_part "... ending daily.local."
+	echo ;
