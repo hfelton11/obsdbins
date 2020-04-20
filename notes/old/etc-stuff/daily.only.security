@@ -1,0 +1,36 @@
+# this should be called via shell, like /etc/daily...
+# e.g. doas sh ~/etc_daily.local.securitY
+#
+umask 022
+
+PARTOUT=/var/log/security.part
+MAINOUT=/var/log/security.out
+install -o 0 -g 0 -m 600    /dev/null $PARTOUT
+install -o 0 -g 0 -m 600 -b /dev/null $MAINOUT
+
+start_part() {
+	TITLE=$1
+	exec > $PARTOUT 2>&1
+}
+
+end_part() {
+	exec >> $MAINOUT 2>&1
+	test -s $PARTOUT || return
+	echo ""
+	echo "$TITLE"
+	cat $PARTOUT
+}
+
+next_part() {
+	end_part
+	start_part "$1"
+}
+
+start_part "Running security(8):"
+export SUIDSKIP
+# this is a perl-script...
+/usr/libexec/security
+end_part
+rm -f $PARTOUT
+
+[ -s $MAINOUT ] && mail -s "`hostname` daily insecurity output" root < $MAINOUT
