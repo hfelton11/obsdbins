@@ -7,6 +7,8 @@
 # local vars...
 DOSYSPATCH=
 DOMKMTREES=1 
+DOREPOSYNC=1 
+DOYPUPDATE=1 
 S_FILE=/var/log/security.out
 
 next_part "daily.local start..."
@@ -28,7 +30,7 @@ next_part "daily.local start..."
 	  fi
 	fi
 
-next_part "update security via mkmtrees, if applic..."
+next_part "...update security via mkmtrees, if applic..."
 	if [ "X$DOMKMTREES" != X1 ] ; then 
 		echo "skipping MKMTREES-checks..." ;
 	else
@@ -39,11 +41,11 @@ next_part "update security via mkmtrees, if applic..."
 	  # 7->(poss-3/1)->(poss-3/2/1)->(hope-1)->(hope-0) is finale...
 	  let mkmtrees_DOIT=0
 	  if [ -s "$S_FILE" ] ; then
-		echo "...security-file is not-ZERO..." ;
+	#	echo "...security-file is not-ZERO..." ;
 		mkmtrees_DOIT=$((mkmtrees_DOIT+2))
 	  fi
 	  if [ -s "${S_FILE}.old" ] ; then
-		echo "...security-file-old is not-ZERO..." ;
+	#	echo "...security-file-old is not-ZERO..." ;
 		mkmtrees_DOIT=$((mkmtrees_DOIT+1))
 	  fi
 	  if [ $mkmtrees_DOIT -eq 0 ] ; then
@@ -52,25 +54,50 @@ next_part "update security via mkmtrees, if applic..."
 		ANS=`diff $S_FILE ${S_FILE}.old` ;
 		if [ $? ] ; then
 			if [ -z "$ANS" ] ; then 
-				echo "...security-files match ..." ;
+	#			echo "...security-files match ..." ;
 				mkmtrees_DOIT=$((mkmtrees_DOIT+4))
-	  		else echo "...new-vs-old security-files do not match..." ;
+			else echo "...new-vs-old security-files do not match..." ;
 			fi
 		else echo "---security-diff FAILED---" ;
 		fi
 	  fi
 	  if [ $mkmtrees_DOIT -eq 7 ] ; then
-		echo "TADAH !!!!" ;
+	#	echo "TADAH !!!!" ;
 		#doas -u mkmtrees ~hfeltonadmin/bin/mkmtrees.sh
 		#/home/hfeltonadmin/bin/mkmtrees.sh
 		ANS=`/home/hfeltonadmin/bin/mkmtrees.sh` ;
 		echo "mkmtrees.sh output=>>>$ANS<<<" ;
-		echo " ==== DID IT WORK ??? === " ; 
+	#	echo " ==== DID IT WORK ??? === " ; 
 	  # all other cases (0-6) should have meanings/comments...
 	  #else echo "not-yet, maybe tomorrow...  i guess i-->$mkmtrees_DOIT" ;
-	  else echo "i-->$mkmtrees_DOIT" ;
+	#  else echo "i-->$mkmtrees_DOIT" ;
 	  fi
 	fi	
+
+next_part "...if mkmtrees.sh, then pkg_add -u..."
+	if [ $mkmtrees_DOIT -eq 7 ] ; then
+	#	echo "mkmtrees.sg happened, so double-check pkgs..." ;
+		pkg_add -u
+	else echo "i-->$mkmtrees_DOIT" ;
+	fi
+
+next_part "...check for yp updates..."
+	if [ "X$DOYPUPDATE" != X1 ] ; then 
+		echo "...skipping YP-updates..." ;
+	else
+		echo "...updating yphfeltonnet:"
+		cd /var/yp && make ;
+	fi
+
+next_part "...check for reposync updates..."
+	if [ "X$DOREPOSYNC" != X1 ] ; then 
+		echo "...skipping REPOSYNC-updates..." ;
+	else
+		# lots of assumptions about users, perm., dir.locs, etc...
+		echo "...brute-force reposync-data follows:"
+		cd /var/xxx-extras/reposync && {
+		su reposync -c 'reposync rsync://anoncvs1.usa.openbsd.org/cvs cvs' ; }
+	fi
 
 next_part "...checking daily-sys-variable-scripts..."
 	echo ;
