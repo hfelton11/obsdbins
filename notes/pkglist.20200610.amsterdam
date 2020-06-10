@@ -1,0 +1,26 @@
+ImageMagick-6.9.10.86p0 image processing tools
+cowsay-3.04         speaking ascii cow
+entr-4.4            run arbitrary commands when files change
+figlet-2.2.5        generates ASCII banner art
+gdiff-3.7p0         GNU versions of the diff utilities
+gdk-pixbuf-2.40.0p2 graphic library for GTK+
+gettext-runtime-0.20.1p1 GNU gettext runtime libraries and programs
+git-2.26.2p0        distributed version control system
+glib2-2.62.6        general-purpose utility library
+lynx-2.8.9rel1p0    text web browser
+mc-4.8.24           free Norton Commander clone with many useful features
+p5-Authen-SASL-2.16 perl interface to the SASL auth framework
+p5-Net-SMTP-SSL-1.04 SSL support for Net::SMTP
+pkglocatedb-1.5     database of packages for use with locate(1)
+popt-1.16p2         getopt(3)-like library with a number of enhancements
+python-2.7.18p0     interpreted object-oriented programming language
+python-3.7.7        interpreted object-oriented programming language
+quirks-3.325        exceptions to pkg_add rules
+rdiff-backup-1.2.8p8 incremental backup
+rxvt-unicode-9.22p10 clone of rxvt with Unicode and Xft support
+shared-mime-info-1.15 shared mime database for desktops
+socat-1.7.3.1p0     relay for bidirectional data transfer
+stow-2.3.1          manages software package installations with symlinks
+syncthing-1.3.2     open decentralized synchronization utility
+tree-0.62           print ascii formatted tree of a directory structure
+vim-8.2.534-no_x11  vi clone, many additional features
