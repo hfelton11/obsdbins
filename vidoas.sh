@@ -26,7 +26,7 @@ export DEBUG_STRING=" \
 3. incorrect $TEST03 \n \
 4. incorrect $TEST04 \n"
 export TESTING_STRING="Currently 4 possible tests: \n$DEBUG_STRING "
-export DODEBUG=
+export DODEBUG=1
 export DONORMAL=1
 export DOHELPFUL=
 export START_STRING="$VIDOAS: MUST supply password before AND after edits..."
@@ -35,6 +35,8 @@ export XPLAINING_STRING="Password is normally required twice... \n \
 
 function setup { 
 	export LAUNCH_CMDS=`mktemp`
+	export PERMIT_FILE=`mktemp`
+	echo "permit $USR" > $PERMIT_FILE
 	export VI_FILE=`mktemp`
 } ; setup ;				# call self-setup...`
 function teardown {
@@ -54,11 +56,30 @@ function assert {
 
 # MAIN-STARTS-HERE (assuming setup;)
 #
-#try "0. TESTING..."
+try "0. TESTING..."
 [ "$DODEBUG" ] && { echo $TESTING_STRING; }
 [ "$DOHELPFUL" ] && { echo $XPLAINING_STRING; }
 [ "$DONORMAL" ] && { echo $START_STRING; }
-#assert "`echo 't'`" "t"
+	let tests_run-=20
+[ "$DODEBUG" ] && { echo "permit file"; }
+	assert "`doas -C $PERMIT_FILE echo`" "permit"
+[ "$DODEBUG" ] && { echo "vi file"; }
+	assert "`doas -C $VI_FILE echo`" "deny"
+	typeset -i test_runs=0
+#	let tests_run=0
+[ "$DODEBUG" ] && { echo "vi file"; }
+	assert "`doas -C $VI_FILE echo`" "deny"
+#TEST00m1=`doas -C $PERMIT_FILE echo`
+#TEST00m2=`doas -L`
+# I need some way to check ownership of tty a/o make a nwe one
+# in  case i have su'ed into this program somehow...  sigh...
+#if [ $? ]; then
+#if [ "$TEST00m2" != "permit" ]; then
+#	echo "cannot do ANY doas-stuff, maybe login as hfeltonadmin ?"
+#fi
+[ "$DODEBUG" ] && { echo "crossing zero"; }
+assert "`echo 't'`" "t"
+#assert "`doas -C $PERMIT_FILE echo`" "permit"
 
 #try "1. create an edit-able copy..."
 try "1. $TEST01"
