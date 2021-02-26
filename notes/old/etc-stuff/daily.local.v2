@@ -10,6 +10,7 @@ DOMKMTREES=1
 DOREPOSYNC=1 
 DOYPUPDATE=1 
 S_FILE=/var/log/security.out
+RS_EXE=/usr/local/bin/reposync
 
 next_part "daily.local start..."
 	if [ "X$DOSYSPATCH" != X1 ] ; then 
@@ -94,9 +95,29 @@ next_part "...check for reposync updates..."
 		echo "...skipping REPOSYNC-updates..." ;
 	else
 		# lots of assumptions about users, perm., dir.locs, etc...
+	  if [ -x $RS_EXE ] ; then
 		echo "...brute-force reposync-data follows:"
+		RS_DIR=/var/xxx-extras/reposync
+		# fun-with forward-slash and single-quotes quoting/interpolating...
+		RS_CVS="rsync://anoncvs1.usa.openbsd.org/cvs"
+		cd $RS_DIR && {
+			su reposync -c ' $RS_EXE $RS_CVS cvs ' ; }
+		echo "rest of the substitution-crap..."
+		RS_CMD="${RS_EXE} ${RS_CVS} cvs"
+		SU_CMD="'${RS_CMD}'"
+		DOIT="su reposync -c ${SU_CMD}"
+		echo "SU_CMD ==>>${SU_CMD}<<=="
+		echo "DOIT ==>>${DOIT}<<=="
+		cd ${RS_DIR} && { 
+			echo "redo-DOIT ==>>" ;
+			echo ${DOIT} ;
+			echo "<<==" ;
+			ANS=$(${DOIT}) ;
+			echo "ANS ==>>${ANS}<<==" ; }
+		### longhand, was...
 		cd /var/xxx-extras/reposync && {
-		su reposync -c 'reposync rsync://anoncvs1.usa.openbsd.org/cvs cvs' ; }
+		su reposync -c '/usr/local/bin/reposync rsync://anoncvs1.usa.openbsd.org/cvs cvs' ; }
+	  fi
 	fi
 
 next_part "...checking daily-sys-variable-scripts..."

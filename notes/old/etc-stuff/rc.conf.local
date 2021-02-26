@@ -1,22 +1,12 @@
-# /etc/rc.conf.local
-
-ntpd_flags="-s"		# Synch time to an ntp server then exit
-
-# main hfelton.com/hfelton.org or local websites...
-httpd_flags=	
-
-# remote vm-items...
-sndiod_flags=NO		# DISABLE sound for virtual-machines...
-
-# local bare-metal-machine items...
-#apmd_flags="-A"		# Start Auto power management
-#library_aslr=NO		# Stop randomizing libraries after each boot
-#dhcpd_flags=re0
-#multicast=YES		# DO NOT reject IPV4 multicast packets by default
-
-# workstation-type items...
-##xenodm_flags=		# Start Xenodm for graphical login
-## If you are using wiconn.sh to connect to a wireless network
-## The next line starts daemons that were installed over and above the
-## base install.  This includes dbus for session management,
-#pkg_scripts="messagebus"
+# --- Mon Sep 21 02:08:32 PDT 2020 ---
+#dhcpd_flags=re0 re1
+#tftpd_flags=NO          # for normal use: "[chroot dir]
+dhcpd_flags=-A abandoned -C changed -L leased re0 re1
+httpd_flags=
+nsd_flags=
+pkg_scripts=rubywarden syncthing php74_fpm
+portmap_flags=
+tftpd_flags=/pxe
+unbound_flags=
+ypbind_flags=
+ypserv_flags=

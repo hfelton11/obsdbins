@@ -1,0 +1,34 @@
+# /etc/daily.local
+#ROOTBACKUP=1
+#CHECKFILESYSTEMS=1
+#CALENDAR=1
+#VERBOSESTATUS=1
+
+next_part "daily.local start..."
+	if [ -x /usr/sbin/syspatch ] ; then
+		echo "...syspatch check..." ;
+		ANS=`/usr/sbin/syspatch -c` ;
+		if [ $? ] ; then
+			if [ -n "$ANS" ] ; then 
+				echo "syspatch-list=>>>$ANS<<<" ;
+				echo " ==== DO A SYSPATCH === " ; 
+			else echo "...up-to-date..." ;
+			fi
+		else echo "---syspatch check FAILED---" ;
+		fi
+	else echo ;
+	fi
+
+next_part "...checking daily-sys-variable-scripts..."
+	echo ;
+	if [ "X$ROOTBACKUP" = X1 ] ; then echo "ROOTBACKUP..." ;
+	fi
+	if [ "X$CHECKFILESYSTEMS" = X1 ] ; then echo "CHECKFILESYSTEMS..." ;
+	fi
+	if [ "X$CALENDAR" != X0 ] ; then echo "CALENDAR..." ;
+	fi
+	if [ "X$VERBOSESTATUS" != X0 ] ; then echo "VERBOSESTATUS..." ;
+	fi
+
+next_part "... ending daily.local."
+	echo ;
