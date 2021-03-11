@@ -91,10 +91,12 @@ while (<$fstab>) {
 if ( not $Day1ck ) { delete $chkDays{1} }
 
 # this creates more-generic shell-script-var version...
+my $dts   = Time::Piece::localtime->strftime('%Y%m%d_%H%M%S');
+my ($hst) = split /\./, Sys::Hostname::hostname();
+
+#my $setlvl = "LVL='0'";
 my $lvl    = 0;
-my $dts    = Time::Piece::localtime->strftime('%Y%m%d_%H%M%S');
-my ($hst)  = split /\./, Sys::Hostname::hostname();
-my $setlvl = "LVL='0'";
+my $setlvl = "LVL='" . $lvl . "'";
 my $v2lvl  = '$LVL';
 my $setdts = "DTS=`date +%Y%m%d_%H%M%S`";
 my $v2dts  = '$DTS';
@@ -108,7 +110,6 @@ my $v4doend = "} \" \n";
 my $v2end   = $v2hst . "." . $v2dts . "-" . $v2lvl;
 
 my $hdr = <<"END_HEADER";
-$setlvl
 $setdts
 $sethst
 END_HEADER
@@ -148,7 +149,9 @@ while ( my ( $d, $l ) = each %dsk2loc ) {
 my $prehdr = <<"END_PREHEADER";
 #!/bin/sh
 # $Fname
+$setlvl
 END_PREHEADER
+
 print $dodump $prehdr;
 print $dodump $hdr;
 print $dodump $v4dobeg;
@@ -170,6 +173,7 @@ for ( sort { $a <=> $b } keys %chkDays ) {
     my $prehdr = <<"END_PREHEADER";
 #!/bin/sh
 # $Fname
+$setlvl
 END_PREHEADER
 
     # HERES THE OTHER-DUMPS FILE DATA...
