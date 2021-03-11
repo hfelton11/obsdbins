@@ -1,5 +1,5 @@
 # this should be called via shell, like /etc/daily...
-# e.g. doas sh ~/etc_daily.only.security
+# e.g. doas sh ~/etc_daily.local.securitY
 #
 umask 022
 

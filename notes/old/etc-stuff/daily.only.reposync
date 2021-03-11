@@ -1,0 +1,79 @@
+# this should be called via shell, like /etc/daily...
+# e.g. doas sh ~/etc_daily.only.reposync
+#
+umask 022
+
+DODEBUG=1 
+DOREPOSYNC=1 
+REPOSYNCERROR=0
+
+PARTOUT=/var/log/reposync.part
+MAINOUT=/var/log/reposync.out
+install -o 0 -g 0 -m 600    /dev/null $PARTOUT
+install -o 0 -g 0 -m 600 -b /dev/null $MAINOUT
+
+start_part() {
+	TITLE=$1
+	exec > $PARTOUT 2>&1
+}
+
+end_part() {
+	exec >> $MAINOUT 2>&1
+	test -s $PARTOUT || return
+	echo ""
+	echo "$TITLE"
+	cat $PARTOUT
+}
+
+next_part() {
+	end_part
+	start_part "$1"
+}
+
+start_part "Running reposync(1):"
+	if [ "X$DOREPOSYNC" != X1 ] ; then 
+		echo "...skipping REPOSYNC-updates..." ;
+	else
+		# lots of assumptions about users, perm., dir.locs, etc...
+		# parameter/command-substitution attempts led to "dragons"...
+	  	#if [ -x $RS_EXE ] ; then
+	  if [ -x /usr/local/bin/reposync ] ; then
+		echo "...brute-force reposync-data follows:"
+		# parameter/command-substitution attempts led to "dragons"...
+		cd /var/xxx-extras/reposync && {
+		### died sometime in late-oct-2020
+		###su reposync -c '/usr/local/bin/reposync rsync://anoncvs1.usa.openbsd.org/cvs cvs' ; }
+		su reposync -c '/usr/local/bin/reposync rsync://anoncvs3.usa.openbsd.org/cvs cvs' ; }
+		if [ $? != 0 ] ; then
+			echo "REPOSYNC had an error !!!"
+			set REPOSYNCERROR=1
+		fi
+	  fi
+	fi
+
+
+#next_part "testing errors..."
+#	echo "test-test-test..."
+
+next_part "Checking for errors..."
+	if [ "X$REPOSYNCERROR" == X0 ] ; then 
+	  if [ "X$DODEBUG" != X1 ] ; then 
+		rm -f $MAINOUT
+		install -o 0 -g 0 -m 600 -b /dev/null $MAINOUT
+	  fi
+		echo "...reposync was fine, so toss output..." ;
+	  if [ "X$DODEBUG" != X1 ] ; then 
+		rm -f $PARTOUT
+		install -o 0 -g 0 -m 600    /dev/null $PARTOUT
+	  fi
+	else
+		echo "REPOSYNC had an error !!!"
+		echo "REPOSYNC had an error !!!"
+		echo "REPOSYNC had an error !!!"
+	fi
+
+end_part
+rm -f $PARTOUT
+
+[ -s $MAINOUT ] && mail -s "`hostname` daily reposync output" root < $MAINOUT
+
